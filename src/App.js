@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+// import "./index.css";
+import react from "react";
+import { useRef, useState, useEffect } from "react";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { convertToRaw, EditorState } from 'draft-js';
+import { MathComponent } from 'mathjax-react'
 
-function App() {
+const EditorComponent = () => {
+  const correctOption = useRef('');
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [text, setText] = useState(String.raw``);
+
+
+  return (
+    <>
+    <Editor
+    toolbarClassName="toolbarClassName"
+    wrapperClassName="wrapperClassName"
+    editorClassName="editorClassName"
+    ref={correctOption}
+    editorState={editorState}
+    onEditorStateChange={(newState) => {
+      setText(correctOption.current.state.editorState.getCurrentContent().getPlainText());
+      setEditorState(newState);
+    }}
+    wrapperStyle={{
+      width: '100%',
+      height: 300,
+    }}
+  />
+  <MathComponent tex={text} />
+</>
+)}
+
+
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Text Editor</h1>
+      <EditorComponent/>
     </div>
   );
 }
-
-export default App;
